@@ -1,17 +1,3 @@
-"""AI-assisted motion pattern implementation.
-
-Preserve the original AI response in Streamlit. Review it, then implement a safe
-version here. The node accepts only segments returned by ``build_pattern``.
-"""
-from __future__ import annotations
-from dataclasses import dataclass
-
-@dataclass(frozen=True)
-class Segment:
-    linear_x: float
-    angular_z: float
-    duration: float
-
 def build_pattern(pattern_name: str) -> list[Segment]:
     """Return ordered, bounded motion segments for the assigned pattern.
 
@@ -19,15 +5,15 @@ def build_pattern(pattern_name: str) -> list[Segment]:
     ``alternating_arcs``. Do not include the final stop; the ROS wrapper always
     publishes it and the evaluator verifies it.
     """
-
     if pattern_name != "l_path":
         raise ValueError(f"Unknown pattern name: {pattern_name}")
 
     # L path: move straight along +x, stop, turn left 90 degrees,
     # stop again, then move straight along the new heading.
     return [
-        Segment(linear_x=0.20, angular_z=0.0, duration=2.0),
+        Segment(linear_x=0.20, angular_z=0.0, duration=5.0),
+        Segment(linear_x=0.0, angular_z=0.0, duration=1.0),
         Segment(linear_x=0.0, angular_z=0.50, duration=3.141592653589793),
-        Segment(linear_x=0.20, angular_z=0.0, duration=2.0),
+        Segment(linear_x=0.0, angular_z=0.0, duration=1.0),
+        Segment(linear_x=0.20, angular_z=0.0, duration=5.0),
     ]
-

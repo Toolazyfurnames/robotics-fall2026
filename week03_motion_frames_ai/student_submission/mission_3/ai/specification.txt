@@ -1,0 +1,1 @@
+Assume +x is forward, turning left is positive. Speeds must be within 0.22 m/s and 0.8 rad/s. Stops are to be made whenever commanded to, or if robot receives unclear instructions or out of bounds values(i.e move forward inf m/s, or turn 1 rad/s).

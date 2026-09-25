@@ -1,0 +1,33 @@
+I updated only build_pattern() in the existing pattern.py; the course wrapper and Segment class are untouched.
+
+The implemented L-path is:
+
+1. Forward at 0.20 m/s for 5 s → about 1.0 m
+2. Stop for 1 s
+3. Turn left at +0.50 rad/s for π s → 0.5\pi \approx 1.571 rad = 90°
+4. Stop for 1 s
+5. Forward at 0.20 m/s for 5 s → another 1.0 m
+
+So, assuming the robot begins at (0, 0) facing +x, the ideal path is approximately:
+
+(0,0) → (1,0) → turn left → (1,1)
+
+All commands satisfy the constraints: linear speed ≤ 0.22 m/s, angular speed ≤ 0.80 rad/s, every duration ≤ 30 s, and total duration is about 15.14 s. The explicit stop segments also satisfy your requirement to stop when commanded; the wrapper still handles the final zero command.
+
+Assumptions
+
+I assumed "l_path" means two straight legs separated by a 90° left turn, with stops before and after the turn. Since you didn’t specify exact leg lengths, I chose 1 m for each leg. I also assume the course wrapper/evaluator is responsible for rejecting malformed/non-finite commands outside build_pattern; this function itself only returns fixed, known-safe segments.
+
+Tests I’d propose
+
+Test that "l_path" returns the five segments in the correct order, that every segment obeys the velocity/duration bounds, that total duration is ≤ 60 s, and that the turn integrates to approximately π/2 radians. Also test that something like build_pattern("circle") raises ValueError.
+
+For safety-oriented tests, verify the wrapper produces a final zero Twist, and—if the wrapper performs validation—that inf, nan, linear speeds above 0.22 m/s, or angular speeds above 0.80 rad/s result in stopping rather than motion.
+
+The 3.141592653589793 second turn is intentional:
+
+0.50\ \text{rad/s} \times \pi\ \text{s}
+= \frac{\pi}{2}\ \text{rad}
+= 90^\circ
+
+So the robot makes a 90° left turn without exceeding the 0.8 rad/s limit.

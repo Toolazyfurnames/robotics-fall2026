@@ -1,0 +1,3 @@
+# Technical synthesis
+
+Let's say a robot had commands to move, has proper speed limits and stays within them, and has a stop command in case of bypassing pedestrians. In a crowded space, even with these proper commands and safety checks, the robot could come across as disruptive to pedestrians trying to pass, and the robot itself could also be confused as to what to do if it gets too crowded. Even if it followed its valid path, the robot could be a hinderance to pedestrians walking around it or wheelchair users trying to pass. To get additional evidence and evaluate the situation, you would need to analyze pedestrian behavior, demographics, and activity(especially during certain times), that way the robot can be adjusted for these sort of situations.
