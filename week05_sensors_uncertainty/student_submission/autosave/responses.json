@@ -1,0 +1,27 @@
+{
+  "checked_evidence_ids": {},
+  "completed_missions": [],
+  "lab_id": "week05_sensors_uncertainty",
+  "mission_2_attempts": [],
+  "mission_3_results": {},
+  "responses": {
+    "concepts.observation": "When I increased noise the values on the measurement sequence and the distribution graphs became less scattered. On the other hand, changing bias moved the all the points overall upwards or downwards on the measurement sequence or leftwards or rightwards on the distribution graph.",
+    "mission_1.bias": "",
+    "mission_1.bias_vs_variance": "",
+    "mission_1.dropouts": "",
+    "mission_1.mean": "",
+    "mission_1.median": "",
+    "mission_1.more_samples": "",
+    "mission_1.outliers": "",
+    "mission_1.profile": "Choose\u2026",
+    "mission_1.robot_consequence": "",
+    "mission_1.variance": ""
+  },
+  "schema_version": 1,
+  "student": {
+    "course_id": "25",
+    "email": "nahil.rashid41@myhunter.cuny.edu",
+    "name": "Nahil Rashid"
+  },
+  "updated_at": "2026-10-01T15:15:31.161128+00:00"
+}

@@ -1,14 +1,31 @@
 {
   "schema_version": 1,
-  "saved_at": "2026-08-30T21:09:52",
+  "saved_at": "2026-09-30T22:25:05",
   "identity": {
     "name": "",
     "student_id": "",
     "section": ""
   },
-  "checkins": {},
-  "explanations": {},
+  "checkins": {
+    "m3_heading_pid": "The robot uses its estimated pose to compute a desired heading, then the PID controller updates its values, Kp Ki Kd, to eliminate the error and generate the steering angle.",
+    "m3_integration": "The PID only sees the odometry estimate, so if the estimate is inaccurate then the robot will follow the inaccurate/wrong physical path",
+    "ethics_failure_mode": "The most dangerous failure is when a robot travels through a busy sidewalk and because its odometry estimate was off, it hits a civilian as it travels. We saw this when we were tuning a robot to drive around some pedestrians to drive over specific waypoints, and we noticed that when the wheel estimate was off, then the robot would follow an inaccurate path, which could have veered into the path of pedestrians.",
+    "ethics_margin": "I would require a margin of 0.1 m/s nearby  any pedestrians, which in turn leads to slower speed, and we accept this because it allows pedestrians to safely pass the robot without the robot being too intrusive to them.",
+    "ethics_accountability": "Responsibility lies primarily with the company. Because the engineer designs and calibrates the robot, the engineer is partially responsible for the tuning/calibration choice. However, the company was the one that actively made the choice to ship out the robot. The company is responsible for ensuring their product is safe to use, so they should have been mindful of any design choices that could cause injury or harm."
+  },
+  "explanations": {
+    "mission_3": {
+      "heading": "The PID checks it's current heading and the direction of the goal point, and after making the calculations, adjusts its angle to make a steer towards the next goal point.",
+      "integration": "A well-tuned controller can still fail when odometry is wrong because the controller only sees the odometry not the physical environment, so even a well tuned controller will be off by a consistent amount if odometry is off."
+    }
+  },
   "activity_gifs": {
+    "mission_1": [
+      "latest_arm_tuning.gif"
+    ],
+    "mission_2": [
+      "latest_odometry_test.gif"
+    ],
     "mission_3": [
       "latest_drive.gif"
     ]
