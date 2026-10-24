@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "lab_id": "week06_slam_localization",
+  "generated_at": "2026-10-24T02:57:27.867475+00:00",
+  "student": {
+    "name": "Nahil Rashid",
+    "email": "nahil.rashid41@login.cuny.edu",
+    "course_id": "26"
+  },
+  "completed_missions": [
+    "mission_1",
+    "mission_2",
+    "mission_3"
+  ],
+  "files": [
+    ".gitkeep",
+    "autosave/responses.json",
+    "autosave/responses.md",
+    "final_reflection.md",
+    "mission_1/Screenshot 2026-10-23 at 4.18.33\u202fPM.png",
+    "mission_1/evidence.json",
+    "mission_1/explanation.md",
+    "mission_1/map.pgm",
+    "mission_1/map.yaml",
+    "mission_1/submission.json",
+    "mission_2/Screenshot 2026-10-23 at 6.31.02\u202fPM.png",
+    "mission_2/evidence.json",
+    "mission_2/explanation.md",
+    "mission_2/map.pgm",
+    "mission_2/map.yaml",
+    "mission_2/submission.json",
+    "mission_3/Screenshot 2026-10-23 at 10.37.06\u202fPM.png",
+    "mission_3/Screenshot 2026-10-23 at 9.58.10\u202fPM.png",
+    "mission_3/ambiguous_location.json",
+    "mission_3/degraded_sensor.json",
+    "mission_3/explanation.md",
+    "mission_3/good_initial_pose.json",
+    "mission_3/incorrect_initial_pose.json",
+    "mission_3/submission.json",
+    "student.json"
+  ]
+}

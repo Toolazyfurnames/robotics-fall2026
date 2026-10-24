@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "captured_at": "2026-10-23T20:05:27.502517+00:00",
+  "strategy": "perimete_then_interior",
+  "duration_minutes": 7.0,
+  "map_yaml": "map.yaml",
+  "map_image": "map.pgm",
+  "metrics": {
+    "width": 129,
+    "height": 129,
+    "resolution": 0.05,
+    "map_area_m2": 41.602500000000006,
+    "known_fraction": 0.5934739498828195,
+    "unknown_fraction": 0.40652605011718046,
+    "occupied_fraction": 0.07114957033832102,
+    "free_fraction": 0.5223243795444985,
+    "occupied_components": 131,
+    "largest_component_cells": 289,
+    "speckle_fraction": 0.11317567567567567,
+    "border_contact_fraction": 0.060546875
+  },
+  "quality_score": 69.1
+}

@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "lab_id": "week06_slam_localization",
+  "mission_id": "mission_2",
+  "saved_at": "2026-10-23T22:48:41.655860+00:00",
+  "evidence": {
+    "evidence_id": "acb5d498e9cba51b",
+    "strategy_1": {
+      "schema_version": 1,
+      "captured_at": "2026-10-23T20:05:27.502517+00:00",
+      "strategy": "perimete_then_interior",
+      "duration_minutes": 7.0,
+      "map_yaml": "map.yaml",
+      "map_image": "map.pgm",
+      "metrics": {
+        "width": 129,
+        "height": 129,
+        "resolution": 0.05,
+        "map_area_m2": 41.602500000000006,
+        "known_fraction": 0.5934739498828195,
+        "unknown_fraction": 0.40652605011718046,
+        "occupied_fraction": 0.07114957033832102,
+        "free_fraction": 0.5223243795444985,
+        "occupied_components": 131,
+        "largest_component_cells": 289,
+        "speckle_fraction": 0.11317567567567567,
+        "border_contact_fraction": 0.060546875
+      },
+      "quality_score": 69.1
+    },
+    "strategy_2": {
+      "schema_version": 1,
+      "captured_at": "2026-10-23T22:27:17.282500+00:00",
+      "strategy": "room_by_room",
+      "duration_minutes": 7.0,
+      "map_yaml": "map.yaml",
+      "map_image": "map.pgm",
+      "metrics": {
+        "width": 112,
+        "height": 103,
+        "resolution": 0.05,
+        "map_area_m2": 28.840000000000003,
+        "known_fraction": 0.7163661581137309,
+        "unknown_fraction": 0.28363384188626906,
+        "occupied_fraction": 0.05573855755894591,
+        "free_fraction": 0.660627600554785,
+        "occupied_components": 31,
+        "largest_component_cells": 258,
+        "speckle_fraction": 0.027993779160186624,
+        "border_contact_fraction": 0.17136150234741784
+      },
+      "quality_score": 85.7
+    }
+  }
+}

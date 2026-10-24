@@ -1,0 +1,1658 @@
+{
+  "schema_version": 1,
+  "lab_id": "week06_slam_localization",
+  "updated_at": "2026-10-24T02:57:27.872773+00:00",
+  "student": {
+    "name": "Nahil Rashid",
+    "email": "nahil.rashid41@login.cuny.edu",
+    "course_id": "26"
+  },
+  "responses": {
+    "concepts.prediction": "One symptom of poor odometry will be wrong or exaggerated distances and one symptom of weak scan geometry will be the robot trying to travel to places that don't exist in the physical world. Poor odometry could be found in Gazebo and VSLAM will be useful for finding weak scan geometry.",
+    "mission_1.system_observation": "Scan would often show different points and these points likely align with the red diagram that RViz creates as some points are grouped together which matches with the pillars on the map. Odometry had changes that were most visible whenever I ran it while moving the robot where it would describe different translations depending on the directions I made it go. TF seems to be pretty messy and gives seemingly random numbers even when the robot isn't moving. The only change that Map seems to give is just printing out the positition, the actual map details seems to stay the same across runs.",
+    "mission_1.map_interpretation": "The known fraction of the map is strange, because most of the map seems to appear on the pgm, but the map still does look strange and seems to layer over itself, so that data could be reliable. But, Speckle, and especially Border Contact, fraction should describe a higher number than what is given considering this fact, there is a lot of data that exists outside so border contact should be higher. Quality Score, may be the fairest value, since the map, while not good, does describe everything but has a lot of noise and other issues.",
+    "mission_1.limitations": "The robot did not observe the boundaries well, as we have doubled walls. This could be caused by the fact that I consistently drove the robot around at 0.05 forward velocity, which may be too fast for the scan, or it could be rotational geometry as a hexagon can look similar when rotating so the map created another hexagon over it.",
+    "mission_2.strategy_prediction": "For this second run, I intend to go across more parts of the map while also avoiding the edges, this should help alleviate the double walls that appear. I also want to avoid going backwards and avoid stopping, which should also help with continuity and loop closure.",
+    "mission_2.comparison": "Looking at the map, it seems that we fixed the double walls that appeared in the first map, the map even came out as much smaller than the original because of this. It seems our prediction was correct in this regard as going slower, not making stops, or going backwards helped prevent double walls and with loop closure. Unsurprisingly our new map has less speckle than our first map but surprisingly we had more border contact, despite the fact that we barely traveled to the border in our run. Also on the pillars, in the original map, the pillars were all rotated and were messy, in our new map, the pillars appear more cleaner with the exception of two pillars on the top right and bottom right. But overall my prediction was correct.",
+    "mission_2.loop_closure": "The second map itself could be evidence of a loop closure, as it is much more coherent compared to the first map, so we could have had a loop closure. But this cannot be confirmation as to truly confirm a loop closure we would need to examine odometry further and compare it with map readings. Loop closure would be a change in existing data, map growth is the addition of new data.",
+    "mission_3.knowing_where": "Using pose, the robot is aware to an extent where it is, covariance/particle spread describes the variance of that pose, constantly changing but regardless, the points will converge to a single area that accurately describes the robots location.",
+    "mission_3.recovery": "The biggest differences between the good and incorrect initial pose trials is convergence time and pose_jump. Its clear that in the incorrect trial, it was far less confident, but the pose jump parameter tells us that it made many corrections.",
+    "mission_3.sensor_effect": "The degraded sensor had a notably higher covariance than the normal but aside from that it also had a higher convergence time and pose jump over the other correct initial poses, which is similar to the incorrect initial pose trial but less so. So the issues with the degraded sensor are similar to if the initial pose was incorrect.",
+    "mission_3.deployment_limit": "One dangerous false confidence case is that the robot has the correct position which could lead the robot to try go to places that it thinks aren't obstacles but are leading to the robot to face damage and/or potentially hit a pedestrian.",
+    "final.synthesis": "For this robot to know where it is, it utilizes a map as a representation of its environment to determine its location. Using SLAM, a robot can construct a map and estimate its own position within it. Whenever a robot returns to a previously visited location, it can recognize that environment and correct any errors from that return, that is loop closure, and it can be determined by examining odometry and seeing if the robot connects that odometry back to the map. The robot also needs to know where it started, initial pose, as a reference for localization, and as we saw, having an incorrect starting pose causes the robot to misinterpret its location on the map. We saw in our tests that the robot had a much higher convergence time and pose jump in the incorrect initial pose trial over the correct initial pose trial, meaning the robot had less confidence and was trying to correct itself frequently. With sensor quality, we observed that poor sensors can lead to errors similar to incorrect initial position, which makes sense as with bad sensors the robot can reduce localization accuracy which also happens with bad initial pose. But overall, for a robot to know where it is does not mean that the robot needs to know exactly where it is down to the atom, rather it needs a precise estimate of its location, and to correct itself if necessary.",
+    "final.course_reflection": "On my interests in robotics and etc I found this more exciting as a task because it involved actual trial and error compared to some of the last few labs, which makes it more of a \"lab\" in that sense. This activity was also one of the most rigorous and process heavy assignments to date (I lost 50% of my battery in 1 hour) so indeed I am a little scared for my computer regarding my motivation but I still would love to keep going with this class. Using RViz to create a map, and even seeing that map as a PGM, was definitely the most standout feature of this lab as it gives a glimpse into how these machines actually interpret its concept of location."
+  },
+  "completed_missions": [
+    "mission_1",
+    "mission_2",
+    "mission_3"
+  ],
+  "checked_evidence_ids": {
+    "mission_1": "cd72427dadac7c2e",
+    "mission_2": "acb5d498e9cba51b",
+    "mission_3": "7f7e3b3996bd2b0a"
+  },
+  "evidence": {
+    "preflight": {
+      "schema_version": 1,
+      "captured_at": "2026-10-22T00:29:59.959958+00:00",
+      "checks": [
+        {
+          "check": "ROS distribution",
+          "passed": true,
+          "detail": "jazzy"
+        },
+        {
+          "check": "ros2 command",
+          "passed": true,
+          "detail": "/opt/ros/jazzy/bin/ros2"
+        },
+        {
+          "check": "ROS_DOMAIN_ID",
+          "passed": true,
+          "detail": "25"
+        },
+        {
+          "check": "Package: turtlebot3_gazebo",
+          "passed": true,
+          "detail": "turtlebot3_gazebo"
+        },
+        {
+          "check": "Package: turtlebot3_teleop",
+          "passed": true,
+          "detail": "turtlebot3_teleop"
+        },
+        {
+          "check": "Package: turtlebot3_navigation2",
+          "passed": true,
+          "detail": "turtlebot3_navigation2"
+        },
+        {
+          "check": "Package: slam_toolbox",
+          "passed": true,
+          "detail": "slam_toolbox"
+        },
+        {
+          "check": "Package: nav2_map_server",
+          "passed": true,
+          "detail": "nav2_map_server"
+        },
+        {
+          "check": "Package: nav2_amcl",
+          "passed": true,
+          "detail": "nav2_amcl"
+        },
+        {
+          "check": "Package: course_slam_tools",
+          "passed": true,
+          "detail": "course_slam_tools"
+        }
+      ],
+      "ready": true
+    },
+    "mission_1": {
+      "schema_version": 1,
+      "captured_at": "2026-10-23T20:05:27.502517+00:00",
+      "strategy": "perimete_then_interior",
+      "duration_minutes": 7.0,
+      "map_yaml": "map.yaml",
+      "map_image": "map.pgm",
+      "metrics": {
+        "width": 129,
+        "height": 129,
+        "resolution": 0.05,
+        "map_area_m2": 41.602500000000006,
+        "known_fraction": 0.5934739498828195,
+        "unknown_fraction": 0.40652605011718046,
+        "occupied_fraction": 0.07114957033832102,
+        "free_fraction": 0.5223243795444985,
+        "occupied_components": 131,
+        "largest_component_cells": 289,
+        "speckle_fraction": 0.11317567567567567,
+        "border_contact_fraction": 0.060546875
+      },
+      "quality_score": 69.1
+    },
+    "mission_2": {
+      "schema_version": 1,
+      "captured_at": "2026-10-23T22:27:17.282500+00:00",
+      "strategy": "room_by_room",
+      "duration_minutes": 7.0,
+      "map_yaml": "map.yaml",
+      "map_image": "map.pgm",
+      "metrics": {
+        "width": 112,
+        "height": 103,
+        "resolution": 0.05,
+        "map_area_m2": 28.840000000000003,
+        "known_fraction": 0.7163661581137309,
+        "unknown_fraction": 0.28363384188626906,
+        "occupied_fraction": 0.05573855755894591,
+        "free_fraction": 0.660627600554785,
+        "occupied_components": 31,
+        "largest_component_cells": 258,
+        "speckle_fraction": 0.027993779160186624,
+        "border_contact_fraction": 0.17136150234741784
+      },
+      "quality_score": 85.7
+    },
+    "mission_3": {
+      "good_initial_pose": {
+        "schema_version": 1,
+        "condition": "good_initial_pose",
+        "metrics": {
+          "sample_count": 52,
+          "duration": 27.994,
+          "convergence_time": 0.629,
+          "final_covariance": 0.0369,
+          "settled_position_spread": 0.016545027954041076,
+          "pose_jump": 0.07092763918247952,
+          "scan_retention": 1.0
+        },
+        "samples": [
+          {
+            "time": 0.629,
+            "x": -1.964,
+            "y": -0.5324,
+            "yaw": 0.2402,
+            "covariance_trace": 0.4504
+          },
+          {
+            "time": 1.166,
+            "x": -1.9899,
+            "y": -0.5162,
+            "yaw": 0.4138,
+            "covariance_trace": 0.3923
+          },
+          {
+            "time": 1.677,
+            "x": -1.9638,
+            "y": -0.5384,
+            "yaw": 0.5943,
+            "covariance_trace": 0.3176
+          },
+          {
+            "time": 2.268,
+            "x": -1.9647,
+            "y": -0.5057,
+            "yaw": 0.8171,
+            "covariance_trace": 0.2411
+          },
+          {
+            "time": 2.83,
+            "x": -1.9791,
+            "y": -0.5413,
+            "yaw": 1.0079,
+            "covariance_trace": 0.2109
+          },
+          {
+            "time": 3.38,
+            "x": -1.9656,
+            "y": -0.5323,
+            "yaw": 1.2096,
+            "covariance_trace": 0.1762
+          },
+          {
+            "time": 3.913,
+            "x": -1.9776,
+            "y": -0.4915,
+            "yaw": 1.3829,
+            "covariance_trace": 0.1439
+          },
+          {
+            "time": 4.466,
+            "x": -1.9878,
+            "y": -0.4986,
+            "yaw": 1.5951,
+            "covariance_trace": 0.1204
+          },
+          {
+            "time": 5.014,
+            "x": -1.977,
+            "y": -0.5406,
+            "yaw": 1.7779,
+            "covariance_trace": 0.1066
+          },
+          {
+            "time": 5.536,
+            "x": -1.9782,
+            "y": -0.5261,
+            "yaw": 1.9532,
+            "covariance_trace": 0.0922
+          },
+          {
+            "time": 6.138,
+            "x": -1.9759,
+            "y": -0.5209,
+            "yaw": 2.1629,
+            "covariance_trace": 0.0778
+          },
+          {
+            "time": 6.62,
+            "x": -1.9765,
+            "y": -0.5193,
+            "yaw": 2.3429,
+            "covariance_trace": 0.0798
+          },
+          {
+            "time": 7.22,
+            "x": -1.9492,
+            "y": -0.5184,
+            "yaw": 2.5577,
+            "covariance_trace": 0.065
+          },
+          {
+            "time": 7.79,
+            "x": -1.9775,
+            "y": -0.527,
+            "yaw": 2.7381,
+            "covariance_trace": 0.0607
+          },
+          {
+            "time": 8.263,
+            "x": -1.9846,
+            "y": -0.5134,
+            "yaw": 2.8024,
+            "covariance_trace": 0.0567
+          },
+          {
+            "time": 8.84,
+            "x": -2.0204,
+            "y": -0.5,
+            "yaw": 2.8451,
+            "covariance_trace": 0.0498
+          },
+          {
+            "time": 9.417,
+            "x": -2.0601,
+            "y": -0.4928,
+            "yaw": 2.8305,
+            "covariance_trace": 0.0437
+          },
+          {
+            "time": 9.952,
+            "x": -2.1264,
+            "y": -0.4676,
+            "yaw": 2.8157,
+            "covariance_trace": 0.0455
+          },
+          {
+            "time": 10.525,
+            "x": -2.1498,
+            "y": -0.4428,
+            "yaw": 2.8216,
+            "covariance_trace": 0.0416
+          },
+          {
+            "time": 11.002,
+            "x": -2.1707,
+            "y": -0.4334,
+            "yaw": 2.8141,
+            "covariance_trace": 0.0428
+          },
+          {
+            "time": 11.595,
+            "x": -2.2158,
+            "y": -0.4337,
+            "yaw": 2.7991,
+            "covariance_trace": 0.0424
+          },
+          {
+            "time": 12.161,
+            "x": -2.2656,
+            "y": -0.4019,
+            "yaw": 2.8134,
+            "covariance_trace": 0.0393
+          },
+          {
+            "time": 12.688,
+            "x": -2.3087,
+            "y": -0.3818,
+            "yaw": 2.8122,
+            "covariance_trace": 0.0409
+          },
+          {
+            "time": 13.297,
+            "x": -2.334,
+            "y": -0.3923,
+            "yaw": 2.8116,
+            "covariance_trace": 0.0366
+          },
+          {
+            "time": 13.79,
+            "x": -2.4004,
+            "y": -0.3729,
+            "yaw": 2.8292,
+            "covariance_trace": 0.0365
+          },
+          {
+            "time": 14.301,
+            "x": -2.4192,
+            "y": -0.3604,
+            "yaw": 2.8403,
+            "covariance_trace": 0.0373
+          },
+          {
+            "time": 14.861,
+            "x": -2.4571,
+            "y": -0.3588,
+            "yaw": 2.8418,
+            "covariance_trace": 0.0351
+          },
+          {
+            "time": 15.406,
+            "x": -2.4831,
+            "y": -0.3067,
+            "yaw": 2.8105,
+            "covariance_trace": 0.0349
+          },
+          {
+            "time": 16.028,
+            "x": -2.5299,
+            "y": -0.3319,
+            "yaw": 2.8047,
+            "covariance_trace": 0.036
+          },
+          {
+            "time": 16.536,
+            "x": -2.525,
+            "y": -0.3057,
+            "yaw": 2.6271,
+            "covariance_trace": 0.0351
+          },
+          {
+            "time": 17.113,
+            "x": -2.5307,
+            "y": -0.3158,
+            "yaw": 2.4224,
+            "covariance_trace": 0.034
+          },
+          {
+            "time": 17.69,
+            "x": -2.5482,
+            "y": -0.3325,
+            "yaw": 2.2444,
+            "covariance_trace": 0.0379
+          },
+          {
+            "time": 18.158,
+            "x": -2.5548,
+            "y": -0.3369,
+            "yaw": 2.0858,
+            "covariance_trace": 0.0333
+          },
+          {
+            "time": 18.745,
+            "x": -2.5427,
+            "y": -0.3389,
+            "yaw": 1.8779,
+            "covariance_trace": 0.0385
+          },
+          {
+            "time": 19.341,
+            "x": -2.5547,
+            "y": -0.3114,
+            "yaw": 1.6416,
+            "covariance_trace": 0.0357
+          },
+          {
+            "time": 19.871,
+            "x": -2.5155,
+            "y": -0.3106,
+            "yaw": 1.4748,
+            "covariance_trace": 0.035
+          },
+          {
+            "time": 20.444,
+            "x": -2.5148,
+            "y": -0.3071,
+            "yaw": 1.2588,
+            "covariance_trace": 0.0396
+          },
+          {
+            "time": 20.943,
+            "x": -2.5326,
+            "y": -0.3204,
+            "yaw": 1.1089,
+            "covariance_trace": 0.0368
+          },
+          {
+            "time": 21.514,
+            "x": -2.5384,
+            "y": -0.3197,
+            "yaw": 0.8955,
+            "covariance_trace": 0.0366
+          },
+          {
+            "time": 22.005,
+            "x": -2.5149,
+            "y": -0.3199,
+            "yaw": 0.7359,
+            "covariance_trace": 0.0342
+          },
+          {
+            "time": 22.584,
+            "x": -2.5181,
+            "y": -0.3099,
+            "yaw": 0.5269,
+            "covariance_trace": 0.0365
+          },
+          {
+            "time": 23.146,
+            "x": -2.5401,
+            "y": -0.3188,
+            "yaw": 0.3318,
+            "covariance_trace": 0.036
+          },
+          {
+            "time": 23.653,
+            "x": -2.5421,
+            "y": -0.3201,
+            "yaw": 0.1401,
+            "covariance_trace": 0.036
+          },
+          {
+            "time": 24.257,
+            "x": -2.5418,
+            "y": -0.3135,
+            "yaw": -0.0672,
+            "covariance_trace": 0.0373
+          },
+          {
+            "time": 24.841,
+            "x": -2.5416,
+            "y": -0.3155,
+            "yaw": -0.278,
+            "covariance_trace": 0.0362
+          },
+          {
+            "time": 25.357,
+            "x": -2.5318,
+            "y": -0.3342,
+            "yaw": -0.451,
+            "covariance_trace": 0.0365
+          },
+          {
+            "time": 25.888,
+            "x": -2.5466,
+            "y": -0.3146,
+            "yaw": -0.6257,
+            "covariance_trace": 0.035
+          },
+          {
+            "time": 26.466,
+            "x": -2.539,
+            "y": -0.3359,
+            "yaw": -0.8392,
+            "covariance_trace": 0.0334
+          },
+          {
+            "time": 27.017,
+            "x": -2.5283,
+            "y": -0.3202,
+            "yaw": -1.0442,
+            "covariance_trace": 0.0338
+          },
+          {
+            "time": 27.506,
+            "x": -2.5157,
+            "y": -0.314,
+            "yaw": -1.1929,
+            "covariance_trace": 0.0368
+          },
+          {
+            "time": 28.06,
+            "x": -2.5374,
+            "y": -0.3167,
+            "yaw": -1.4213,
+            "covariance_trace": 0.0342
+          },
+          {
+            "time": 28.623,
+            "x": -2.5602,
+            "y": -0.3298,
+            "yaw": -1.6016,
+            "covariance_trace": 0.0369
+          }
+        ]
+      },
+      "incorrect_initial_pose": {
+        "schema_version": 1,
+        "condition": "incorrect_initial_pose",
+        "metrics": {
+          "sample_count": 52,
+          "duration": 28.037,
+          "convergence_time": 16.047,
+          "final_covariance": 0.0603,
+          "settled_position_spread": 0.01857447913132424,
+          "pose_jump": 0.3506543169561728,
+          "scan_retention": 1.0
+        },
+        "samples": [
+          {
+            "time": 0.622,
+            "x": -0.884,
+            "y": 0.1817,
+            "yaw": 1.9572,
+            "covariance_trace": 0.6311
+          },
+          {
+            "time": 1.111,
+            "x": -0.8873,
+            "y": 0.1987,
+            "yaw": 2.1973,
+            "covariance_trace": 0.6377
+          },
+          {
+            "time": 1.718,
+            "x": -0.9075,
+            "y": 0.1424,
+            "yaw": 2.3412,
+            "covariance_trace": 0.725
+          },
+          {
+            "time": 2.22,
+            "x": -0.856,
+            "y": 0.1463,
+            "yaw": 2.5336,
+            "covariance_trace": 0.6849
+          },
+          {
+            "time": 2.809,
+            "x": -0.9022,
+            "y": 0.2707,
+            "yaw": 2.7289,
+            "covariance_trace": 0.613
+          },
+          {
+            "time": 3.371,
+            "x": -0.928,
+            "y": 0.1366,
+            "yaw": 2.9745,
+            "covariance_trace": 0.783
+          },
+          {
+            "time": 3.853,
+            "x": -0.9134,
+            "y": 0.2148,
+            "yaw": 3.1077,
+            "covariance_trace": 0.7712
+          },
+          {
+            "time": 4.492,
+            "x": -0.8595,
+            "y": 0.1862,
+            "yaw": -2.9545,
+            "covariance_trace": 0.7884
+          },
+          {
+            "time": 4.964,
+            "x": -0.885,
+            "y": 0.2009,
+            "yaw": -2.7207,
+            "covariance_trace": 0.8198
+          },
+          {
+            "time": 5.509,
+            "x": -0.9269,
+            "y": 0.1828,
+            "yaw": -2.577,
+            "covariance_trace": 0.8727
+          },
+          {
+            "time": 6.068,
+            "x": -0.861,
+            "y": 0.1944,
+            "yaw": -2.4521,
+            "covariance_trace": 0.8318
+          },
+          {
+            "time": 6.663,
+            "x": -0.9315,
+            "y": 0.2039,
+            "yaw": -2.1466,
+            "covariance_trace": 0.9568
+          },
+          {
+            "time": 7.169,
+            "x": -0.9689,
+            "y": 0.2232,
+            "yaw": -2.1103,
+            "covariance_trace": 0.8561
+          },
+          {
+            "time": 7.781,
+            "x": -0.9201,
+            "y": 0.1983,
+            "yaw": -1.8477,
+            "covariance_trace": 0.9022
+          },
+          {
+            "time": 8.336,
+            "x": -0.9842,
+            "y": 0.1966,
+            "yaw": -1.7162,
+            "covariance_trace": 0.9037
+          },
+          {
+            "time": 8.884,
+            "x": -0.9438,
+            "y": 0.2085,
+            "yaw": -1.6626,
+            "covariance_trace": 0.9275
+          },
+          {
+            "time": 9.435,
+            "x": -1.0174,
+            "y": 0.262,
+            "yaw": -1.7073,
+            "covariance_trace": 1.033
+          },
+          {
+            "time": 9.986,
+            "x": -1.043,
+            "y": 0.253,
+            "yaw": -1.7388,
+            "covariance_trace": 1.0393
+          },
+          {
+            "time": 10.512,
+            "x": -1.0671,
+            "y": 0.1723,
+            "yaw": -1.7,
+            "covariance_trace": 1.0676
+          },
+          {
+            "time": 11.013,
+            "x": -1.0531,
+            "y": 0.2321,
+            "yaw": -1.839,
+            "covariance_trace": 1.0338
+          },
+          {
+            "time": 11.602,
+            "x": -1.3676,
+            "y": 0.1044,
+            "yaw": -2.1691,
+            "covariance_trace": 1.1774
+          },
+          {
+            "time": 12.184,
+            "x": -1.6973,
+            "y": -0.015,
+            "yaw": -2.4662,
+            "covariance_trace": 0.9743
+          },
+          {
+            "time": 12.657,
+            "x": -1.8235,
+            "y": -0.0554,
+            "yaw": -2.7504,
+            "covariance_trace": 0.9995
+          },
+          {
+            "time": 13.216,
+            "x": -2.1006,
+            "y": -0.1866,
+            "yaw": -3.0521,
+            "covariance_trace": 0.9657
+          },
+          {
+            "time": 13.759,
+            "x": -2.2598,
+            "y": -0.3064,
+            "yaw": 2.9671,
+            "covariance_trace": 1.0845
+          },
+          {
+            "time": 14.316,
+            "x": -2.4509,
+            "y": -0.3744,
+            "yaw": 2.8043,
+            "covariance_trace": 0.959
+          },
+          {
+            "time": 14.913,
+            "x": -2.4729,
+            "y": -0.3453,
+            "yaw": 2.793,
+            "covariance_trace": 0.7519
+          },
+          {
+            "time": 15.461,
+            "x": -2.5533,
+            "y": -0.3051,
+            "yaw": 2.778,
+            "covariance_trace": 0.59
+          },
+          {
+            "time": 16.047,
+            "x": -2.5886,
+            "y": -0.3225,
+            "yaw": 2.7834,
+            "covariance_trace": 0.4979
+          },
+          {
+            "time": 16.588,
+            "x": -2.5185,
+            "y": -0.2901,
+            "yaw": 2.589,
+            "covariance_trace": 0.4136
+          },
+          {
+            "time": 17.077,
+            "x": -2.568,
+            "y": -0.3135,
+            "yaw": 2.4179,
+            "covariance_trace": 0.3434
+          },
+          {
+            "time": 17.684,
+            "x": -2.5852,
+            "y": -0.2787,
+            "yaw": 2.2241,
+            "covariance_trace": 0.3038
+          },
+          {
+            "time": 18.197,
+            "x": -2.5678,
+            "y": -0.2973,
+            "yaw": 2.003,
+            "covariance_trace": 0.2401
+          },
+          {
+            "time": 18.71,
+            "x": -2.5676,
+            "y": -0.2982,
+            "yaw": 1.891,
+            "covariance_trace": 0.2094
+          },
+          {
+            "time": 19.318,
+            "x": -2.571,
+            "y": -0.2983,
+            "yaw": 1.6557,
+            "covariance_trace": 0.1876
+          },
+          {
+            "time": 19.879,
+            "x": -2.5356,
+            "y": -0.3011,
+            "yaw": 1.4315,
+            "covariance_trace": 0.1565
+          },
+          {
+            "time": 20.404,
+            "x": -2.576,
+            "y": -0.2835,
+            "yaw": 1.2708,
+            "covariance_trace": 0.1314
+          },
+          {
+            "time": 20.998,
+            "x": -2.5662,
+            "y": -0.3035,
+            "yaw": 1.0502,
+            "covariance_trace": 0.1114
+          },
+          {
+            "time": 21.512,
+            "x": -2.5345,
+            "y": -0.2984,
+            "yaw": 0.8521,
+            "covariance_trace": 0.1092
+          },
+          {
+            "time": 22.017,
+            "x": -2.5629,
+            "y": -0.2985,
+            "yaw": 0.6972,
+            "covariance_trace": 0.1042
+          },
+          {
+            "time": 22.565,
+            "x": -2.5427,
+            "y": -0.2904,
+            "yaw": 0.493,
+            "covariance_trace": 0.0831
+          },
+          {
+            "time": 23.122,
+            "x": -2.5681,
+            "y": -0.319,
+            "yaw": 0.3332,
+            "covariance_trace": 0.0905
+          },
+          {
+            "time": 23.686,
+            "x": -2.5615,
+            "y": -0.2902,
+            "yaw": 0.1194,
+            "covariance_trace": 0.0793
+          },
+          {
+            "time": 24.238,
+            "x": -2.5789,
+            "y": -0.3031,
+            "yaw": -0.087,
+            "covariance_trace": 0.0751
+          },
+          {
+            "time": 24.793,
+            "x": -2.5833,
+            "y": -0.3096,
+            "yaw": -0.2868,
+            "covariance_trace": 0.0714
+          },
+          {
+            "time": 25.364,
+            "x": -2.5484,
+            "y": -0.302,
+            "yaw": -0.495,
+            "covariance_trace": 0.0652
+          },
+          {
+            "time": 25.875,
+            "x": -2.5692,
+            "y": -0.2594,
+            "yaw": -0.6613,
+            "covariance_trace": 0.072
+          },
+          {
+            "time": 26.437,
+            "x": -2.5465,
+            "y": -0.2998,
+            "yaw": -0.8459,
+            "covariance_trace": 0.0656
+          },
+          {
+            "time": 26.978,
+            "x": -2.5731,
+            "y": -0.3096,
+            "yaw": -1.0515,
+            "covariance_trace": 0.0622
+          },
+          {
+            "time": 27.508,
+            "x": -2.553,
+            "y": -0.2886,
+            "yaw": -1.2369,
+            "covariance_trace": 0.064
+          },
+          {
+            "time": 28.076,
+            "x": -2.5535,
+            "y": -0.2989,
+            "yaw": -1.4321,
+            "covariance_trace": 0.0665
+          },
+          {
+            "time": 28.659,
+            "x": -2.551,
+            "y": -0.3181,
+            "yaw": -1.6315,
+            "covariance_trace": 0.0603
+          }
+        ]
+      },
+      "ambiguous_location": {
+        "schema_version": 1,
+        "condition": "ambiguous_location",
+        "metrics": {
+          "sample_count": 52,
+          "duration": 28.078,
+          "convergence_time": 0.6,
+          "final_covariance": 0.0474,
+          "settled_position_spread": 0.023072194303966856,
+          "pose_jump": 0.08956896784043014,
+          "scan_retention": 1.0
+        },
+        "samples": [
+          {
+            "time": 0.6,
+            "x": 1.9945,
+            "y": 0.4623,
+            "yaw": -2.9316,
+            "covariance_trace": 0.4787
+          },
+          {
+            "time": 1.105,
+            "x": 1.9637,
+            "y": 0.4965,
+            "yaw": -2.7368,
+            "covariance_trace": 0.4381
+          },
+          {
+            "time": 1.714,
+            "x": 2.0254,
+            "y": 0.4708,
+            "yaw": -2.5167,
+            "covariance_trace": 0.3618
+          },
+          {
+            "time": 2.214,
+            "x": 2.0133,
+            "y": 0.5123,
+            "yaw": -2.3737,
+            "covariance_trace": 0.2983
+          },
+          {
+            "time": 2.778,
+            "x": 2.0044,
+            "y": 0.5086,
+            "yaw": -2.1662,
+            "covariance_trace": 0.2571
+          },
+          {
+            "time": 3.322,
+            "x": 1.9912,
+            "y": 0.5166,
+            "yaw": -1.9874,
+            "covariance_trace": 0.207
+          },
+          {
+            "time": 3.899,
+            "x": 1.989,
+            "y": 0.5223,
+            "yaw": -1.7731,
+            "covariance_trace": 0.197
+          },
+          {
+            "time": 4.411,
+            "x": 1.9952,
+            "y": 0.4914,
+            "yaw": -1.5948,
+            "covariance_trace": 0.1769
+          },
+          {
+            "time": 5.006,
+            "x": 1.9855,
+            "y": 0.4807,
+            "yaw": -1.399,
+            "covariance_trace": 0.145
+          },
+          {
+            "time": 5.591,
+            "x": 1.9985,
+            "y": 0.4817,
+            "yaw": -1.2034,
+            "covariance_trace": 0.1356
+          },
+          {
+            "time": 6.062,
+            "x": 1.976,
+            "y": 0.4694,
+            "yaw": -1.0338,
+            "covariance_trace": 0.124
+          },
+          {
+            "time": 6.625,
+            "x": 2.0148,
+            "y": 0.4906,
+            "yaw": -0.8409,
+            "covariance_trace": 0.1135
+          },
+          {
+            "time": 7.187,
+            "x": 2.0153,
+            "y": 0.4896,
+            "yaw": -0.6391,
+            "covariance_trace": 0.095
+          },
+          {
+            "time": 7.759,
+            "x": 1.9917,
+            "y": 0.5015,
+            "yaw": -0.4178,
+            "covariance_trace": 0.0874
+          },
+          {
+            "time": 8.308,
+            "x": 2.0128,
+            "y": 0.4741,
+            "yaw": -0.3509,
+            "covariance_trace": 0.0865
+          },
+          {
+            "time": 8.9,
+            "x": 2.1009,
+            "y": 0.4802,
+            "yaw": -0.3577,
+            "covariance_trace": 0.0739
+          },
+          {
+            "time": 9.414,
+            "x": 2.0783,
+            "y": 0.4384,
+            "yaw": -0.3202,
+            "covariance_trace": 0.0718
+          },
+          {
+            "time": 9.935,
+            "x": 2.1111,
+            "y": 0.4815,
+            "yaw": -0.3484,
+            "covariance_trace": 0.0691
+          },
+          {
+            "time": 10.509,
+            "x": 2.1897,
+            "y": 0.448,
+            "yaw": -0.3561,
+            "covariance_trace": 0.0619
+          },
+          {
+            "time": 11.054,
+            "x": 2.2276,
+            "y": 0.4016,
+            "yaw": -0.3093,
+            "covariance_trace": 0.0619
+          },
+          {
+            "time": 11.576,
+            "x": 2.2561,
+            "y": 0.3934,
+            "yaw": -0.318,
+            "covariance_trace": 0.0595
+          },
+          {
+            "time": 12.142,
+            "x": 2.3085,
+            "y": 0.4271,
+            "yaw": -0.3435,
+            "covariance_trace": 0.0595
+          },
+          {
+            "time": 12.73,
+            "x": 2.3397,
+            "y": 0.3814,
+            "yaw": -0.3162,
+            "covariance_trace": 0.0582
+          },
+          {
+            "time": 13.256,
+            "x": 2.3296,
+            "y": 0.3723,
+            "yaw": -0.3536,
+            "covariance_trace": 0.0566
+          },
+          {
+            "time": 13.85,
+            "x": 2.4178,
+            "y": 0.3567,
+            "yaw": -0.3332,
+            "covariance_trace": 0.0626
+          },
+          {
+            "time": 14.342,
+            "x": 2.4374,
+            "y": 0.3542,
+            "yaw": -0.3623,
+            "covariance_trace": 0.0577
+          },
+          {
+            "time": 14.914,
+            "x": 2.4864,
+            "y": 0.3378,
+            "yaw": -0.3323,
+            "covariance_trace": 0.0504
+          },
+          {
+            "time": 15.45,
+            "x": 2.5415,
+            "y": 0.3598,
+            "yaw": -0.3812,
+            "covariance_trace": 0.0519
+          },
+          {
+            "time": 16.017,
+            "x": 2.5628,
+            "y": 0.2959,
+            "yaw": -0.3174,
+            "covariance_trace": 0.0498
+          },
+          {
+            "time": 16.508,
+            "x": 2.5889,
+            "y": 0.3123,
+            "yaw": -0.5251,
+            "covariance_trace": 0.0506
+          },
+          {
+            "time": 17.149,
+            "x": 2.5843,
+            "y": 0.3126,
+            "yaw": -0.7598,
+            "covariance_trace": 0.052
+          },
+          {
+            "time": 17.667,
+            "x": 2.5367,
+            "y": 0.3102,
+            "yaw": -0.9247,
+            "covariance_trace": 0.0511
+          },
+          {
+            "time": 18.183,
+            "x": 2.5508,
+            "y": 0.295,
+            "yaw": -1.109,
+            "covariance_trace": 0.0508
+          },
+          {
+            "time": 18.711,
+            "x": 2.5528,
+            "y": 0.2981,
+            "yaw": -1.2854,
+            "covariance_trace": 0.0536
+          },
+          {
+            "time": 19.309,
+            "x": 2.5516,
+            "y": 0.279,
+            "yaw": -1.5191,
+            "covariance_trace": 0.0509
+          },
+          {
+            "time": 19.887,
+            "x": 2.5905,
+            "y": 0.2699,
+            "yaw": -1.6768,
+            "covariance_trace": 0.0494
+          },
+          {
+            "time": 20.37,
+            "x": 2.561,
+            "y": 0.285,
+            "yaw": -1.8768,
+            "covariance_trace": 0.053
+          },
+          {
+            "time": 20.903,
+            "x": 2.5543,
+            "y": 0.3035,
+            "yaw": -2.0557,
+            "covariance_trace": 0.0532
+          },
+          {
+            "time": 21.526,
+            "x": 2.5563,
+            "y": 0.2862,
+            "yaw": -2.2786,
+            "covariance_trace": 0.0479
+          },
+          {
+            "time": 22.036,
+            "x": 2.5529,
+            "y": 0.307,
+            "yaw": -2.4272,
+            "covariance_trace": 0.0558
+          },
+          {
+            "time": 22.61,
+            "x": 2.5516,
+            "y": 0.2785,
+            "yaw": -2.6803,
+            "covariance_trace": 0.0502
+          },
+          {
+            "time": 23.101,
+            "x": 2.5857,
+            "y": 0.3079,
+            "yaw": -2.8296,
+            "covariance_trace": 0.0503
+          },
+          {
+            "time": 23.671,
+            "x": 2.5493,
+            "y": 0.3434,
+            "yaw": -3.0238,
+            "covariance_trace": 0.0496
+          },
+          {
+            "time": 24.239,
+            "x": 2.5596,
+            "y": 0.3069,
+            "yaw": 3.0445,
+            "covariance_trace": 0.0575
+          },
+          {
+            "time": 24.842,
+            "x": 2.5614,
+            "y": 0.3301,
+            "yaw": 2.8644,
+            "covariance_trace": 0.0527
+          },
+          {
+            "time": 25.309,
+            "x": 2.55,
+            "y": 0.2801,
+            "yaw": 2.7072,
+            "covariance_trace": 0.05
+          },
+          {
+            "time": 25.941,
+            "x": 2.5665,
+            "y": 0.3242,
+            "yaw": 2.4639,
+            "covariance_trace": 0.051
+          },
+          {
+            "time": 26.498,
+            "x": 2.5819,
+            "y": 0.3019,
+            "yaw": 2.2623,
+            "covariance_trace": 0.0516
+          },
+          {
+            "time": 27.036,
+            "x": 2.5658,
+            "y": 0.2813,
+            "yaw": 2.0479,
+            "covariance_trace": 0.0482
+          },
+          {
+            "time": 27.506,
+            "x": 2.5456,
+            "y": 0.2698,
+            "yaw": 1.8973,
+            "covariance_trace": 0.0482
+          },
+          {
+            "time": 28.075,
+            "x": 2.5708,
+            "y": 0.3088,
+            "yaw": 1.7062,
+            "covariance_trace": 0.0516
+          },
+          {
+            "time": 28.678,
+            "x": 2.5703,
+            "y": 0.3069,
+            "yaw": 1.5102,
+            "covariance_trace": 0.0474
+          }
+        ]
+      },
+      "degraded_sensor": {
+        "schema_version": 1,
+        "condition": "degraded_sensor",
+        "metrics": {
+          "sample_count": 52,
+          "duration": 28.091,
+          "convergence_time": 3.923,
+          "final_covariance": 0.2322,
+          "settled_position_spread": 0.044166600220075784,
+          "pose_jump": 0.18312449317335994,
+          "scan_retention": 0.493
+        },
+        "samples": [
+          {
+            "time": 0.561,
+            "x": -1.926,
+            "y": -0.5591,
+            "yaw": 0.2216,
+            "covariance_trace": 0.7004
+          },
+          {
+            "time": 1.152,
+            "x": -1.9243,
+            "y": -0.4701,
+            "yaw": 0.4259,
+            "covariance_trace": 0.6212
+          },
+          {
+            "time": 1.714,
+            "x": -1.9629,
+            "y": -0.5195,
+            "yaw": 0.6282,
+            "covariance_trace": 0.5867
+          },
+          {
+            "time": 2.287,
+            "x": -1.8622,
+            "y": -0.5049,
+            "yaw": 0.8134,
+            "covariance_trace": 0.5824
+          },
+          {
+            "time": 2.761,
+            "x": -1.9614,
+            "y": -0.5523,
+            "yaw": 0.9757,
+            "covariance_trace": 0.5153
+          },
+          {
+            "time": 3.31,
+            "x": -1.8632,
+            "y": -0.5172,
+            "yaw": 1.2231,
+            "covariance_trace": 0.5529
+          },
+          {
+            "time": 3.923,
+            "x": -1.9293,
+            "y": -0.5536,
+            "yaw": 1.3797,
+            "covariance_trace": 0.453
+          },
+          {
+            "time": 4.403,
+            "x": -1.8574,
+            "y": -0.5467,
+            "yaw": 1.5724,
+            "covariance_trace": 0.4352
+          },
+          {
+            "time": 5.027,
+            "x": -1.948,
+            "y": -0.565,
+            "yaw": 1.8127,
+            "covariance_trace": 0.4503
+          },
+          {
+            "time": 5.566,
+            "x": -1.9855,
+            "y": -0.6429,
+            "yaw": 1.9987,
+            "covariance_trace": 0.4413
+          },
+          {
+            "time": 6.088,
+            "x": -1.906,
+            "y": -0.5594,
+            "yaw": 2.2172,
+            "covariance_trace": 0.3934
+          },
+          {
+            "time": 6.677,
+            "x": -1.8827,
+            "y": -0.5081,
+            "yaw": 2.3403,
+            "covariance_trace": 0.4164
+          },
+          {
+            "time": 7.155,
+            "x": -1.9429,
+            "y": -0.5066,
+            "yaw": 2.548,
+            "covariance_trace": 0.4089
+          },
+          {
+            "time": 7.711,
+            "x": -1.9322,
+            "y": -0.5004,
+            "yaw": 2.7029,
+            "covariance_trace": 0.4176
+          },
+          {
+            "time": 8.287,
+            "x": -1.9623,
+            "y": -0.5094,
+            "yaw": 2.8303,
+            "covariance_trace": 0.3483
+          },
+          {
+            "time": 8.898,
+            "x": -1.9791,
+            "y": -0.4832,
+            "yaw": 2.8692,
+            "covariance_trace": 0.3386
+          },
+          {
+            "time": 9.373,
+            "x": -2.095,
+            "y": -0.5203,
+            "yaw": 2.8902,
+            "covariance_trace": 0.3131
+          },
+          {
+            "time": 9.971,
+            "x": -2.0,
+            "y": -0.4635,
+            "yaw": 2.8533,
+            "covariance_trace": 0.3332
+          },
+          {
+            "time": 10.501,
+            "x": -2.0963,
+            "y": -0.486,
+            "yaw": 2.8851,
+            "covariance_trace": 0.3663
+          },
+          {
+            "time": 11.028,
+            "x": -2.0941,
+            "y": -0.541,
+            "yaw": 2.8528,
+            "covariance_trace": 0.3235
+          },
+          {
+            "time": 11.572,
+            "x": -2.2168,
+            "y": -0.5014,
+            "yaw": 2.8227,
+            "covariance_trace": 0.3336
+          },
+          {
+            "time": 12.107,
+            "x": -2.1874,
+            "y": -0.4417,
+            "yaw": 2.8134,
+            "covariance_trace": 0.2789
+          },
+          {
+            "time": 12.745,
+            "x": -2.1878,
+            "y": -0.4816,
+            "yaw": 2.8215,
+            "covariance_trace": 0.2869
+          },
+          {
+            "time": 13.205,
+            "x": -2.3685,
+            "y": -0.4519,
+            "yaw": 2.8592,
+            "covariance_trace": 0.2769
+          },
+          {
+            "time": 13.814,
+            "x": -2.3264,
+            "y": -0.5154,
+            "yaw": 2.8407,
+            "covariance_trace": 0.269
+          },
+          {
+            "time": 14.396,
+            "x": -2.381,
+            "y": -0.3895,
+            "yaw": 2.8784,
+            "covariance_trace": 0.2808
+          },
+          {
+            "time": 14.85,
+            "x": -2.4195,
+            "y": -0.3603,
+            "yaw": 2.9131,
+            "covariance_trace": 0.2808
+          },
+          {
+            "time": 15.437,
+            "x": -2.4131,
+            "y": -0.3265,
+            "yaw": 2.8598,
+            "covariance_trace": 0.2887
+          },
+          {
+            "time": 15.991,
+            "x": -2.5197,
+            "y": -0.2981,
+            "yaw": 2.8728,
+            "covariance_trace": 0.2966
+          },
+          {
+            "time": 16.546,
+            "x": -2.5237,
+            "y": -0.3356,
+            "yaw": 2.6816,
+            "covariance_trace": 0.2654
+          },
+          {
+            "time": 17.092,
+            "x": -2.4966,
+            "y": -0.3312,
+            "yaw": 2.5204,
+            "covariance_trace": 0.2705
+          },
+          {
+            "time": 17.681,
+            "x": -2.5108,
+            "y": -0.3146,
+            "yaw": 2.2663,
+            "covariance_trace": 0.2611
+          },
+          {
+            "time": 18.177,
+            "x": -2.4977,
+            "y": -0.3753,
+            "yaw": 2.0881,
+            "covariance_trace": 0.2793
+          },
+          {
+            "time": 18.727,
+            "x": -2.489,
+            "y": -0.3394,
+            "yaw": 1.959,
+            "covariance_trace": 0.2587
+          },
+          {
+            "time": 19.274,
+            "x": -2.4638,
+            "y": -0.3206,
+            "yaw": 1.6243,
+            "covariance_trace": 0.2521
+          },
+          {
+            "time": 19.838,
+            "x": -2.4493,
+            "y": -0.2993,
+            "yaw": 1.5222,
+            "covariance_trace": 0.2653
+          },
+          {
+            "time": 20.372,
+            "x": -2.4333,
+            "y": -0.4148,
+            "yaw": 1.2836,
+            "covariance_trace": 0.2683
+          },
+          {
+            "time": 20.97,
+            "x": -2.5563,
+            "y": -0.3307,
+            "yaw": 1.0877,
+            "covariance_trace": 0.2735
+          },
+          {
+            "time": 21.466,
+            "x": -2.4825,
+            "y": -0.3332,
+            "yaw": 0.976,
+            "covariance_trace": 0.2826
+          },
+          {
+            "time": 22.025,
+            "x": -2.4986,
+            "y": -0.3537,
+            "yaw": 0.7808,
+            "covariance_trace": 0.2369
+          },
+          {
+            "time": 22.617,
+            "x": -2.4864,
+            "y": -0.3497,
+            "yaw": 0.5354,
+            "covariance_trace": 0.2447
+          },
+          {
+            "time": 23.194,
+            "x": -2.465,
+            "y": -0.3474,
+            "yaw": 0.2944,
+            "covariance_trace": 0.2456
+          },
+          {
+            "time": 23.73,
+            "x": -2.4285,
+            "y": -0.3187,
+            "yaw": 0.2308,
+            "covariance_trace": 0.2525
+          },
+          {
+            "time": 24.279,
+            "x": -2.4836,
+            "y": -0.3477,
+            "yaw": -0.0363,
+            "covariance_trace": 0.2521
+          },
+          {
+            "time": 24.767,
+            "x": -2.4862,
+            "y": -0.3074,
+            "yaw": -0.2448,
+            "covariance_trace": 0.2481
+          },
+          {
+            "time": 25.399,
+            "x": -2.5301,
+            "y": -0.3723,
+            "yaw": -0.416,
+            "covariance_trace": 0.232
+          },
+          {
+            "time": 25.937,
+            "x": -2.4795,
+            "y": -0.3779,
+            "yaw": -0.5935,
+            "covariance_trace": 0.2342
+          },
+          {
+            "time": 26.402,
+            "x": -2.5216,
+            "y": -0.3027,
+            "yaw": -0.8081,
+            "covariance_trace": 0.2278
+          },
+          {
+            "time": 27.027,
+            "x": -2.5066,
+            "y": -0.4244,
+            "yaw": -1.0127,
+            "covariance_trace": 0.272
+          },
+          {
+            "time": 27.589,
+            "x": -2.4859,
+            "y": -0.3724,
+            "yaw": -1.2616,
+            "covariance_trace": 0.2303
+          },
+          {
+            "time": 28.135,
+            "x": -2.4931,
+            "y": -0.3391,
+            "yaw": -1.411,
+            "covariance_trace": 0.2429
+          },
+          {
+            "time": 28.652,
+            "x": -2.4821,
+            "y": -0.3367,
+            "yaw": -1.5432,
+            "covariance_trace": 0.2322
+          }
+        ]
+      }
+    }
+  }
+}
